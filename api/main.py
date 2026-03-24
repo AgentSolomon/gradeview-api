@@ -191,10 +191,17 @@ def search(
     q: str = Query(..., min_length=2),
     school: str = Query("tamu"),
 ):
+    import re
     q_upper = q.upper().replace("-", " ").strip()
-    parts = q_upper.split()
-    dept = parts[0]
-    course_num = parts[1] if len(parts) > 1 else None
+    # Handle "BIOL111" or "BIOL 111" or "BIOL-111"
+    match = re.match(r'^([A-Z]+)\s*(\d+)?$', q_upper.replace(" ", ""))
+    if match:
+        dept = match.group(1)
+        course_num = match.group(2) if match.group(2) else None
+    else:
+        parts = q_upper.split()
+        dept = parts[0]
+        course_num = parts[1] if len(parts) > 1 else None
 
     if course_num:
         rows = db(
