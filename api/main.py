@@ -77,8 +77,20 @@ def root():
 
 @app.get("/schools")
 def list_schools():
-    schools = db("SELECT id, name, short_name, color FROM schools")
-    return {"schools": [{"id": s["id"], "name": s["name"], "short": s["short_name"], "color": s["color"]} for s in schools]}
+    schools = db("SELECT id, name, short_name, color, state FROM schools")
+    return {"schools": [{"id": s["id"], "name": s["name"], "short": s["short_name"], "color": s["color"], "state": s["state"] or ""} for s in schools]}
+
+@app.get("/states")
+def list_states():
+    schools = db("SELECT id, name, short_name, color, state FROM schools")
+    states: dict = {}
+    for s in schools:
+        st = s["state"] or "Other"
+        if st not in states:
+            states[st] = []
+        states[st].append({"id": s["id"], "name": s["name"], "short": s["short_name"], "color": s["color"], "state": st})
+    result = [{"state": k, "schools": v} for k, v in sorted(states.items())]
+    return {"states": result}
 
 
 @app.get("/departments")
