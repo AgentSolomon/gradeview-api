@@ -56,7 +56,7 @@ def grade_summary(rows: list) -> dict:
         (A * 4.0 + B * 3.0 + C * 2.0 + D * 1.0) / total, 3
     ) if total else 0.0
     return {
-        "A": A, "B": B, "C": C, "D": D, "F": F,
+        "A": A, "B": B, "C": C, "D": D, "F": F, "Q": 0,
         "total": total,
         "avg_gpa": avg_gpa,
         "pct_A": round(A / total * 100, 1) if total else 0,
@@ -134,8 +134,11 @@ def get_course(
     for prof, prof_rows in sorted(profs.items()):
         summary = grade_summary(prof_rows)
         summary["professor"] = prof
+        summary["sections"] = len(set((r["year"], r["semester"]) for r in prof_rows))
         prof_summaries.append(summary)
     prof_summaries.sort(key=lambda x: x["total"], reverse=True)
+
+    years = sorted(set(int(r["year"]) for r in rows if r["year"] and r["year"].isdigit()))
 
     return {
         "school": school,
@@ -144,7 +147,7 @@ def get_course(
         "overall": grade_summary(rows),
         "by_professor": prof_summaries,
         "semesters_available": sorted(set(r["semester"] for r in rows)),
-        "years_available": sorted(set(r["year"] for r in rows)),
+        "years_available": years,
     }
 
 
@@ -174,6 +177,7 @@ def get_professor(
     for key, course_rows in sorted(courses.items()):
         summary = grade_summary(course_rows)
         summary["course"] = key
+        summary["sections"] = len(set((r["year"], r["semester"]) for r in course_rows))
         course_summaries.append(summary)
 
     prof_name = rows[0]["instructor"]
@@ -228,6 +232,7 @@ def search(
         summary = grade_summary(course_rows)
         summary["department"] = dept
         summary["course"] = cn
+        summary["sections"] = len(set((r["year"], r["semester"]) for r in course_rows))
         results.append(summary)
 
     return {"school": school, "query": q, "department": dept, "results": results}
