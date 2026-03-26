@@ -1,0 +1,5 @@
+EMAIL=admin@gradeview.app
+APP_PASSWORD=qtigvjmfcjmpryab
+IMAP_SERVER=imap.gmail.com
+SMTP_SERVER=smtp.gmail.com
+SEND_AS=admin@gradeview.app

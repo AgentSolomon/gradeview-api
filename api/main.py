@@ -258,3 +258,40 @@ def health():
         return {"status": "ok", "total_rows": int(rows[0]["cnt"])}
     except Exception as e:
         return {"status": "error", "detail": str(e)}
+
+
+# ── LectureKey Autocomplete Endpoints ──────────────────────────────────────
+
+@app.get("/professors")
+def search_professors(school: str = "tamu", q: str = ""):
+    if not q or len(q) < 2:
+        return []
+    try:
+        results = execute_query("""
+            SELECT DISTINCT instructor, dept, course_number
+            FROM grades
+            WHERE school_id = ? 
+            AND LOWER(instructor) LIKE ?
+            AND instructor != 'N/A'
+            AND instructor != ''
+            LIMIT 10
+        """, [school, f"%{q.lower()}%"])
+        return [{"instructor": r[0], "dept": r[1], "course_number": r[2]} for r in results]
+    except Exception as e:
+        return []
+
+@app.get("/courses")
+def search_courses(school: str = "tamu", dept: str = ""):
+    if not dept or len(dept) < 2:
+        return []
+    try:
+        results = execute_query("""
+            SELECT DISTINCT dept, course_number
+            FROM grades
+            WHERE school_id = ?
+            AND UPPER(dept) LIKE ?
+            LIMIT 10
+        """, [school, f"{dept.upper()}%"])
+        return [{"dept": r[0], "course_number": r[1]} for r in results]
+    except Exception as e:
+        return []
