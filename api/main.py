@@ -267,31 +267,23 @@ def search_professors(school: str = "tamu", q: str = ""):
     if not q or len(q) < 2:
         return []
     try:
-        results = execute_query("""
-            SELECT DISTINCT instructor, dept, course_number
-            FROM grades
-            WHERE school_id = ? 
-            AND LOWER(instructor) LIKE ?
-            AND instructor != 'N/A'
-            AND instructor != ''
-            LIMIT 10
-        """, [school, f"%{q.lower()}%"])
-        return [{"instructor": r[0], "dept": r[1], "course_number": r[2]} for r in results]
+        results = db(
+            "SELECT DISTINCT instructor, dept, course_number FROM grades WHERE school_id = ? AND LOWER(instructor) LIKE ? LIMIT 10",
+            [school, f"%{q.lower()}%"]
+        )
+        return [{"instructor": r["instructor"], "dept": r["dept"], "course_number": r["course_number"]} for r in results]
     except Exception as e:
-        return []
+        return {"error": str(e)}
 
 @app.get("/courses")
 def search_courses(school: str = "tamu", dept: str = ""):
     if not dept or len(dept) < 2:
         return []
     try:
-        results = execute_query("""
-            SELECT DISTINCT dept, course_number
-            FROM grades
-            WHERE school_id = ?
-            AND UPPER(dept) LIKE ?
-            LIMIT 10
-        """, [school, f"{dept.upper()}%"])
-        return [{"dept": r[0], "course_number": r[1]} for r in results]
+        results = db(
+            "SELECT DISTINCT dept, course_number FROM grades WHERE school_id = ? AND UPPER(dept) LIKE ? LIMIT 10",
+            [school, f"{dept.upper()}%"]
+        )
+        return [{"dept": r["dept"], "course_number": r["course_number"]} for r in results]
     except Exception as e:
-        return []
+        return {"error": str(e)}
