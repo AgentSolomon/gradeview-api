@@ -53,6 +53,26 @@ tpia@gradeview.app
 
 ---
 
+## Standard Fee Response (use FIRST before paying any fee)
+
+When a school quotes a fee, always reply asking for a raw extract first:
+
+> "Thank you for the update. Before committing to the fee, I wanted to ask — would it be possible to provide the data as a raw or unformatted export directly from your system (e.g., an unprocessed CSV or database extract)? We are happy to handle any cleaning or formatting on our end, which may reduce the staff time required.
+>
+> If a raw export is not feasible and the [fee amount] fee is the only option, please let me know and I will provide a mailing address for the invoice.
+>
+> Thank you for your time.
+>
+> Best regards,
+> Ryan Aikin"
+
+**Notes:**
+- Send this BEFORE approving any fee — no exceptions
+- If they say raw export isn't possible, bring back to Ryan for fee approval
+- Gate log: use action `follow_up` with details noting the fee amount and ask
+
+---
+
 ## Standard Commercial Use Response
 
 Use this whenever a school asks if the request is for commercial or non-commercial purposes:
