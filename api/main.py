@@ -252,12 +252,12 @@ def search(
 
 @app.get("/health")
 def health():
-    """Health check — also verifies DB connectivity."""
+    """Lightweight health check for load balancer / Railway healthchecks."""
     try:
-        rows = db("SELECT COUNT(*) as cnt FROM grades")
-        return {"status": "ok", "total_rows": int(rows[0]["cnt"])}
+        rows = db("SELECT 1 AS ok")
+        return {"status": "ok", "db": "reachable" if rows else "unreachable"}
     except Exception as e:
-        return {"status": "error", "detail": str(e)}
+        return {"status": "error", "detail": str(e)[:200]}
 
 
 # ── LectureKey Autocomplete Endpoints ──────────────────────────────────────
