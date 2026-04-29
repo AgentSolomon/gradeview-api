@@ -7,3 +7,4 @@ __pycache__/
 .turso_config
 *.log
 .DS_Store
+tpia/.email_config

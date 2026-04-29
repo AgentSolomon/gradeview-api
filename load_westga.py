@@ -8,8 +8,8 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import ssl
 
-TURSO_URL = "https://gradeview-agentsolomon.aws-us-east-2.turso.io/v2/pipeline"
-TURSO_TOKEN = "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NzQzMTc5NTQsImlkIjoiMDE5ZDFkOTMtZTgwMS03ODU2LThlNjYtNWY1NTgwN2I0Y2E2IiwicmlkIjoiYjBlOTI1YzAtYzM4My00ODcxLTg0NjAtYjg4OGM2NGRhNWQ3In0.uBwikoGHc1YqWDWu8HX9LIIMZ9blRUozr04x0SXBYXtyecQdcWy3RKIxXuDAAlxSHOD5R2F5k2xaQrsPk38cBA"
+TURSO_URL = os.environ["TURSO_URL"]
+TURSO_TOKEN = os.environ["TURSO_TOKEN"]
 
 GRADE_COLS = {3: 'A', 5: 'B', 6: 'C', 7: 'D', 8: 'F', 10: 'F'}  # col_idx -> grade (WF->F)
 
@@ -162,7 +162,7 @@ admin@gradeview.app"""
     msg.attach(MIMEText(body, 'plain'))
     context = ssl.create_default_context()
     with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as server:
-        server.login('admin@gradeview.app', 'qtigvjmfcjmpryab')
+        server.login('admin@gradeview.app', os.environ["GMAIL_PASSWORD"])
         server.sendmail('admin@gradeview.app', 'tpearson@westga.edu', msg.as_string())
     print("Email sent successfully!")
 except Exception as e:

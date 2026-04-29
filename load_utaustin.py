@@ -6,8 +6,8 @@ import urllib.request
 import urllib.error
 import os
 
-TURSO_URL = "https://gradeview-agentsolomon.aws-us-east-2.turso.io/v2/pipeline"
-TOKEN = "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NzQzMTc5NTQsImlkIjoiMDE5ZDFkOTMtZTgwMS03ODU2LThlNjYtNWY1NTgwN2I0Y2E2IiwicmlkIjoiYjBlOTI1YzAtYzM4My00ODcxLTg0NjAtYjg4OGM2NGRhNWQ3In0.uBwikoGHc1YqWDWu8HX9LIIMZ9blRUozr04x0SXBYXtyecQdcWy3RKIxXuDAAlxSHOD5R2F5k2xaQrsPk38cBA"
+TURSO_URL = os.environ["TURSO_URL"]
+TOKEN = os.environ["TURSO_TOKEN"]
 
 GRADE_MAP = {
     'A+': 'A', 'A': 'A', 'A-': 'A',
@@ -85,14 +85,14 @@ for fpath in files:
                 continue
             semester = parts[0].upper()
             year = parts[1]
-            
+
             letter = row['Letter Grade'].strip()
             mapped = GRADE_MAP.get(letter)
             if not mapped:
                 file_skipped += 1
                 total_skipped += 1
                 continue
-            
+
             dept = row['Course Prefix'].strip().replace(' ', '')
             course_number = row['Course Number'].strip().replace(' ', '')
             try:
@@ -101,7 +101,7 @@ for fpath in files:
                 file_skipped += 1
                 total_skipped += 1
                 continue
-            
+
             all_rows.append(('utaustin', year, semester, dept, course_number, 'N/A', mapped, count))
             file_rows += 1
     print(f"  {fname}: {file_rows} rows, {file_skipped} skipped")

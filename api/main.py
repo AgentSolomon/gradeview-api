@@ -18,8 +18,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-TURSO_URL = os.environ.get("TURSO_URL", "https://gradeview-agentsolomon.aws-us-east-2.turso.io/v2/pipeline")
-TURSO_TOKEN = os.environ.get("TURSO_TOKEN", "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NzQzMTc5NTQsImlkIjoiMDE5ZDFkOTMtZTgwMS03ODU2LThlNjYtNWY1NTgwN2I0Y2E2IiwicmlkIjoiYjBlOTI1YzAtYzM4My00ODcxLTg0NjAtYjg4OGM2NGRhNWQ3In0.uBwikoGHc1YqWDWu8HX9LIIMZ9blRUozr04x0SXBYXtyecQdcWy3RKIxXuDAAlxSHOD5R2F5k2xaQrsPk38cBA")
+TURSO_URL = os.environ["TURSO_URL"]
+TURSO_TOKEN = os.environ["TURSO_TOKEN"]
 
 def db(sql: str, args: list = None):
     """Execute a single SQL query against Turso and return rows as dicts."""
